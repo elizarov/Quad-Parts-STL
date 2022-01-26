@@ -20,16 +20,16 @@ pl = 18;
 
 // antenna support
 ash = 10;
-asw = 4; // width
+asw = 3; // width
 
 // antenna itself
 ad = 6;  // diameter
 od = 14; // outer diameter
 aa = 35; // angle 
-aao = 11; // offset angle
+aao = 14; // offset angle
 axo = 6; // x offset
-ayo = -2; // y offset
-azo = -2; // z offset
+ayo = -2.5; // y offset
+azo = -2.5; // z offset
 
 eps = 0.5;
 
