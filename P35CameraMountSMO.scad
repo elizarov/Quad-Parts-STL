@@ -9,6 +9,7 @@ br = 4; // border radius from hole center
 l1 = 24;
 w1 = 14;
 fa = 30;
+sd = 4.0; // scredriwer diameter
 
 // duct radius cutout
 duct_x = 58;
@@ -21,8 +22,8 @@ w0 = 26;
 l0 = l1 + 2 * br;
 
 // camera mount base dimensions
-gl = 9; // length
-gs = 8; // offset from the front
+gl = 15; // length
+gs = 9; // offset from the front
 
 ch = 40.0;
 cw = 11.0;
@@ -33,7 +34,7 @@ mw = 16;  // mount width
 ma = 25; // mount angle (from vertical) 
 
 // camera mount location
-mx = 20;
+mx = 17;
 mz = -0.5; 
 
 // lens front
@@ -74,6 +75,8 @@ difference() {
     translate([0, br, -eps]) cylinder(d = dh, h = h0 + 2 * eps);
     translate([w1 / 2, br + l1, -eps]) cylinder(d = dh, h = h0 + 2 * eps);
     translate([-w1 / 2, br + l1, -eps]) cylinder(d = dh, h = h0 + 2 * eps);
+    // screwdriver 
+    translate([0, br, h0]) cylinder(d = sd, h = ch);
 }
           
             
