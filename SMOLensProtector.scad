@@ -20,6 +20,12 @@ notch_w = 3;
 
 fov = 110;
 
+// lock pin
+lock_h = 1.5; // height of lock pin
+lock_w = 1.5; // lock widht
+lock_vsize = 15; // lock vertical size
+
+
 eps = 0.5;
 
 d_outer = d1 + 2 * tan(fov / 2) * h1;
@@ -49,6 +55,15 @@ module protector() {
             cylinder(d = d0, h = h0 + h1 + 2 * eps);
         translate([0, 0, h0])
             cylinder(d1 = d0, d2 = d0 + 2 * tan(fov / 2) * (h1 + eps), h = h1 + eps);
+    }
+    intersection() {
+        difference() {
+            cylinder(d = d1 + 2 * lock_w, h = lock_h);
+            translate([0, 0, -eps])
+                cylinder(d = d0, h = lock_h + 2 * eps);
+        }
+        translate([0, -lock_vsize / 2, 0])
+            cube([d1 / 2 + lock_w, lock_vsize, lock_h]);
     }
 }
 
