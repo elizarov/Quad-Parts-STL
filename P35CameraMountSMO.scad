@@ -27,18 +27,31 @@ gs = 9; // offset from the front
 
 ch = 40.0;
 cw = 11.0;
+cx = 62; // horizontal camera size
 cr = 0.5;   // corner radius
 mt = 2.5; // mount thickness
 mw = 16;  // mount width
+
+// bottom support
+sw = 6;  // side width
+bh = 5;  // bottom height
+pch = 1; // chamfer for protector
+bcx = 3; // bottom connector x-dim
+bcy = 4; // bottom connector y-dim
+
+// top connector
+tw = 6; // top width
+tcw = 5;
+tsd = 2; // top screw diameter
+
 
 ma = 25; // mount angle (from vertical) 
 
 // camera mount location
 mx = 17;
-mz = -0.5; 
+mz = -0.8; 
 
 // lens front
-cx = 60; // horizontal camera size to compute offset
 lfw = 23;
 lfh = 23;
 lfr = 3; // radius
@@ -64,19 +77,35 @@ eps = 0.5;
 m_ty = mx - (cw + 2 * mt) * cos(ma);
 m_tz = (cw + 2 * mt) * sin(ma) + mz;
 
+//mount();
+
 difference() {
     union() {
-        translate([0, m_ty, m_tz])
-            rotate([-ma, 0, 0])
-                    mount();
+        mount_placement() {
+            mount();
+            translate([-cx / 2 - sw, 0, 0])
+                chamfer_cube([cx + 2 * sw, cw + 2 * mt, mt + bh], pch);
+        }
         base_plate(); 
     }
+    // cut from base support
+    mount_placement() {
+        #mount_cut();
+    }
+    translate([-cx / 2 - sw - eps, 0, -bh])
+        cube([cx + 2 * sw + 2 * eps, l0, bh]);
     // baseplate holes
     translate([0, br, -eps]) cylinder(d = dh, h = h0 + 2 * eps);
     translate([w1 / 2, br + l1, -eps]) cylinder(d = dh, h = h0 + 2 * eps);
     translate([-w1 / 2, br + l1, -eps]) cylinder(d = dh, h = h0 + 2 * eps);
     // screwdriver 
     translate([0, br, h0]) cylinder(d = sd, h = ch);
+}
+
+module mount_placement() {
+    translate([0, m_ty, m_tz])
+        rotate([-ma, 0, 0])
+            children();
 }
           
             
@@ -105,14 +134,37 @@ module mount2d_base() {
             translate([-h0, gs])
                 square([h0, gl]);
 }
+
+module mount_cut() {
+    translate([-cx / 2 - sw - eps, 0, 0])
+        rotate([90, 90, 90])
+            linear_extrude(cx + 2 * sw + 2 * eps) {
+                mount2d_inner();
+            }
+            
+    translate([-cx / 2 - bcx, mt + cw / 2 - bcy / 2, -eps])
+        cube([bcx, bcy, mt + eps]);
+    translate([cx / 2, mt + cw / 2 - bcy / 2, -eps])
+        cube([bcx, bcy, mt + eps]);
+}
  
 module mount() {
     difference() {
-        translate([-mw / 2, 0, 0])
-            rotate([90, 90, 90])
-                linear_extrude(mw) {
-                    mount2d();
-                }
+        union() {
+            translate([-mw / 2, 0, 0])
+                rotate([90, 90, 90])
+                    linear_extrude(mw) {
+                        mount2d();
+                    }
+            // top connector
+            translate([-tcw / 2, -tcw / 2 + cw / 2 + mt, ch + mt])
+                cube([tcw, tcw, tw + eps]);
+        }
+        // top connector screw
+        translate([0, cw + tw + eps, ch + 2 * mt])
+            rotate([90, 0, 0])
+                cylinder(d = tsd, h = cw + 2 * tw + 2 * eps);
+        // lens holes
         #translate([lfr + (cx / 2 - lfw - lfx), mt + eps, lfr + mt + lfz])
             rotate([90, 0, 0])
                 linear_extrude(mt + 2 * eps)
@@ -169,3 +221,34 @@ module base_plate() {
         }
     } 
 }
+
+module chamfer(d, ch) {
+    translate([-eps, 0, 0])
+        rotate([90, 0, 0]) rotate([0, 90, 0])
+            linear_extrude(d + 2 * eps)
+                polygon([[-eps, -eps], [ch + eps, -eps], [-eps, ch + eps]]);
+}
+
+module chamfer_cube(s, ch) {
+    difference() {
+        cube(s);
+        chamfer_cube_bottom(s, ch);
+        translate([0, s.y, s.z])
+            rotate([180, 0, 0]) chamfer_cube_bottom(s, ch);
+    }
+}
+
+module chamfer_cube_bottom(s, ch) {
+    chamfer(s.x, ch);
+    translate([s.x, s.y, 0])
+        rotate([0, 0, 180]) chamfer(s.x, ch);
+    translate([s.x, 0, 0])
+        rotate([0, 0, 90]) chamfer(s.y, ch);
+    translate([0, s.y, 0])
+        rotate([0, 0, -90]) chamfer(s.y, ch);
+    translate([0, 0, s.z])
+        rotate([0, 90, 0]) chamfer(s.z, ch);
+    translate([s.x, 0, 0])
+        rotate([0, -90, 0]) chamfer(s.z, ch);
+}
+

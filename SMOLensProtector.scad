@@ -62,8 +62,8 @@ module protector() {
             translate([0, 0, -eps])
                 cylinder(d = d0, h = lock_h + 2 * eps);
         }
-        translate([0, -lock_vsize / 2, 0])
-            cube([d1 / 2 + lock_w, lock_vsize, lock_h]);
+        translate([-d1 / 2 - lock_w, -lock_vsize / 2, 0])
+            cube([d1 + 2 * lock_w, lock_vsize, lock_h]);
     }
 }
 
