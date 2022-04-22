@@ -8,7 +8,7 @@ h0 = 2.5;
 
 // P35 mounting plate
 w0 = 40;
-l0 = 45;
+l0 = 42;
 
 // mounting holes placement
 dh = 2.3; // hole diameter
@@ -30,8 +30,9 @@ ssh = 10; // side support height
 
 // cutouts for strap
 stw = 10;
-stl = 5;
-std = 4; // distance betweem them
+stl = 3.5;
+std = 3.5; // distance betweem them
+stt = 0.6; // top cutout
 st0 = l1 + 29; // central location for coutouts
 
 // GPS mount
@@ -63,17 +64,23 @@ bmh2 = 16;
 
 eps = 0.5;
 
-linear_extrude(h0) {
-    difference() {
-        translate([-w0 / 2, 0]) square([w0, l0]);
-        translate([-w1 / 2, l1]) circle(d = dh);
-        translate([ w1 / 2, l1]) circle(d = dh);
-        translate([ duct_x, duct_y]) circle(r = duct_r);
-        translate([-duct_x, duct_y]) circle(r = duct_r);
-        translate([-pw / 2, py]) square([pw, pl]);
-        translate([-stw / 2, st0 - stl - std / 2]) square([stw, stl]);
-        translate([-stw / 2, st0       + std / 2]) square([stw, stl]);
+difference() { 
+    // baseplate
+    linear_extrude(h0) {
+        difference() {
+            translate([-w0 / 2, 0]) square([w0, l0]);
+            translate([-w1 / 2, l1]) circle(d = dh);
+            translate([ w1 / 2, l1]) circle(d = dh);
+            translate([ duct_x, duct_y]) circle(r = duct_r);
+            translate([-duct_x, duct_y]) circle(r = duct_r);
+            translate([-pw / 2, py]) square([pw, pl]);
+            translate([-stw / 2, st0 - stl - std / 2]) square([stw, stl]);
+            translate([-stw / 2, st0       + std / 2]) square([stw, stl]);
+        }
     }
+    translate([-stw / 2, st0 - std / 2, h0 - stt]) 
+        cube([stw, std, stt + eps]);
+    
 }
 
 difference() {
@@ -105,7 +112,7 @@ module inner_side_structure() {
     x1 = gmw / 2;
     hull() {
         translate([x0, y0, 0])
-            cube([bw, pl + py - y0, h]);
+            cube([bw, gmsl - y0, h]);
         translate([x0, y0, 0])
             cube([x1 - x0, bw, h]);
         bg_connector(h);
@@ -163,10 +170,10 @@ module beeper_mount() {
     con_y = 3.5;
     con_w = 8;
 
-    but_z = 6.5;
-    but_h = 5.0;
+    but_z = 4.5;
+    but_h = 7.0;
     but_x = 0.0;
-    but_w = 9.5;
+    but_w = 10.0;
 
     led_d = 3.2;
     led_d2 = 4;

@@ -4,7 +4,10 @@ $fs = $preview ? 0.5 : 0.2;
 $fa = $preview ? 10 : 2;
 
 // protector
-tw = 6; // top width
+tw = 6; // top protector width
+ty = 4.5; // top protector y offset from base structure
+tc = 5.0; // top cutout widht 
+
 sw = 6; // side width
 ph = 12; // protected height
 pch = 1; // chamfer for protector
@@ -74,8 +77,8 @@ difference() {
     union() {
         translate([-cx / 2 - sw, 0, 0])
             chamfer_cube([cx + 2 * sw, cw + 2 * mt, ph + tw], pch);
-        translate([-cx / 2 - sw, -tw + mt, 0])
-            chamfer_cube([cx + 2 * sw, cw + 2 * tw, tw], pch);
+        translate([-cx / 2 - sw, -ty + mt, 0])
+            chamfer_cube([cx + 2 * sw, cw + 2 * ty, tw], pch);
         // left cover (around lens)
         translate([-cx / 2 - sw, 0, 0])
             chamfer_cube([side_x, side_y, side_z], pch);
@@ -151,9 +154,13 @@ module camera() {
     // top connector    
     translate([-tcw / 2, -tcw / 2 + cw / 2, ch])
         cube([tcw, tcw, tw + eps]);
-    translate([0, cw + tw + eps, ch + mt])
+    translate([0, cw + ty + eps, ch + mt])
         rotate([90, 0, 0])
-            cylinder(d = tsd, h = cw + 2 * tw + 2 * eps);
+            cylinder(d = tsd, h = cw + 2 * ty + 2 * eps);
+    translate([-tc / 2, -ty - eps, ch])
+        cube([tc, pch + eps, tw]);
+    translate([-tc / 2, cw + ty - pch, ch])
+        cube([tc, pch + eps, tw]);
 }
 
 module mount_cut() {

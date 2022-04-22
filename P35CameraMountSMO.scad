@@ -9,7 +9,7 @@ br = 4; // border radius from hole center
 l1 = 24;
 w1 = 14;
 fa = 30;
-sd = 4.0; // scredriwer diameter
+sd = 5.0; // scredriwer diameter
 
 // duct radius cutout
 duct_x = 58;
@@ -22,8 +22,8 @@ w0 = 26;
 l0 = l1 + 2 * br;
 
 // camera mount base dimensions
-gl = 15; // length
-gs = 9; // offset from the front
+gl = 16; // length
+gs = 8; // offset from the front
 
 ch = 40.0;
 cw = 11.0;
@@ -48,7 +48,7 @@ tsd = 2; // top screw diameter
 ma = 25; // mount angle (from vertical) 
 
 // camera mount location
-mx = 17;
+mx = 16;
 mz = -0.8; 
 
 // lens front
