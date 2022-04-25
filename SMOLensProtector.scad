@@ -14,9 +14,11 @@ h_rim = 1;
 d1 = d0 + 2 * dr;
 echo("d1", d1);
 
-h_cap = h_rim + 0.8;
+hd = 1.5;
+h_cap = h_rim + hd;
 w_cap = 1.6;
-notch_w = 3;
+notch_w = 10;
+notch_eps = 0.5;
 
 fov = 110;
 
@@ -28,7 +30,8 @@ lock_vsize = 15; // lock vertical size
 
 eps = 0.5;
 
-d_outer = d1 + 2 * tan(fov / 2) * h1;
+d1d = 2 * tan(fov / 2) * h1;
+d_outer = d1 + d1d;
 echo("d_outer", d_outer);
 
 if (print_cap) {
@@ -55,6 +58,11 @@ module protector() {
             cylinder(d = d0, h = h0 + h1 + 2 * eps);
         translate([0, 0, h0])
             cylinder(d1 = d0, d2 = d0 + 2 * tan(fov / 2) * (h1 + eps), h = h1 + eps);
+        difference() {
+            translate([-notch_w / 2 - notch_eps, -d_outer / 2, 0])
+                cube([notch_w + 2 * notch_eps, d_outer, h0 + h1 + eps]);    
+            cylinder(d = d1 + d1d * (h1 - hd) / h1, h = h0 + h1 + eps);
+        }
     }
     intersection() {
         difference() {
