@@ -8,7 +8,7 @@ h0 = 2.5;
 
 // P35 mounting plate
 w0 = 40;
-l0 = 42;
+l0 = 43;
 
 // mounting holes placement
 dh = 2.3; // hole diameter
@@ -146,10 +146,10 @@ module gps_case() {
     translate([-gmw / 2 - bw, 0, 0]) {
         difference() {
             cube([gmw + 2 * bw, gml + bw, gmh + gcw]);        
-            translate([bw, bw, -eps]) cube([gmw, gml + eps, gmh + gcw + 2 * eps]);
+            translate([bw, -eps, -eps]) cube([gmw, gml + bw + 2 * eps, gmh + gcw + 2 * eps]);
         }
-        translate([0, 0, gmh + gcw]) gps_case_top();
     }
+    translate([-gmw / 2 - bw, 0, gmh + gcw]) gps_case_top();
     translate([-gmw / 2 - bw, 0, 0]) gps_case_top();
 }
 
@@ -165,10 +165,10 @@ module beeper_mount() {
     h1 = 12;
     l1 = 10;
 
-    con_z = 7.0;
-    con_h = 4;
-    con_y = 3.5;
-    con_w = 8;
+    con_z = 3;
+    con_h = 8;
+    con_y = 1.5;
+    con_w = 10;
 
     but_z = 4.5;
     but_h = 7.0;
