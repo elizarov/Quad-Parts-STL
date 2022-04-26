@@ -21,6 +21,10 @@ h0 = 2.5;
 w0 = 26;
 l0 = l1 + 2 * br;
 
+// front protrusion
+fpl = 10; // length from the center of the front hole
+fpw = 3;
+
 // camera mount base dimensions
 gl = 16; // length
 gs = 8; // offset from the front
@@ -87,6 +91,8 @@ difference() {
                 chamfer_cube([cx + 2 * sw, cw + 2 * mt, mt + bh], pch);
         }
         base_plate(); 
+        // front protrusion
+        translate([-fpw / 2, -fpl + br, 0]) cube([fpw, fpl, h0]);
     }
     // cut from base support
     mount_placement() {
